@@ -1,15 +1,27 @@
-//Import the necessary libraries/declare the necessary objects
-var express = require("express");
-var myParser = require("body-parser");
 var fs = require("fs");
-var app = express();
-
-  app.use(myParser.urlencoded({extended : true}));
-  app.post("/yourpath", function(request, response) {
-      console.log(request.body); //This prints the JSON document received (if it is a JSON document)
-	  fs.writeFileSync("postdata", request.body+"\n", "UTF-8");
-});
-
-//Start the server and make it listen for connections on port 8080
+var app = require('http').createServer(handler);
+var statusCode = 200;
 
 app.listen(443);
+
+function handler (req, res) {
+  var data = '';
+
+  if (req.method == "POST") {
+    req.on('data', function(chunk) {
+      data += chunk;
+    });
+
+    req.on('end', function() {
+      console.log('Received body data:');
+      console.log(data.toString());
+	  fs.writeFileSync("postdata", data.toString()+"\n", "UTF-8");
+    });
+  }
+
+  res.writeHead(statusCode, {'Content-Type': 'text/plain'});
+  res.end();
+}
+
+console.log("Listening to port 9000");
+console.log("Returning status code " + statusCode.toString());
