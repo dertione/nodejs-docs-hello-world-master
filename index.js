@@ -47,7 +47,7 @@ client.on("message", function (topic, message) {
   console.log("Port:", loraMessage.metadata.network.lora.port);
   console.log("Fcnt:", loraMessage.metadata.network.lora.fcnt);
   console.log("Payload:", loraMessage.value.payload, "\n");
-  fs.writeFile('/home/site/',loraMessage.timestamp, function (err,data) {
+  fs.writeFile('/home/site/wwwroot/test',loraMessage.timestamp, function (err,data) {
   if (err) {
     return console.log(err);
   }
