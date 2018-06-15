@@ -13,7 +13,7 @@ var fs = require("fs");
 
 
 // Create connection to database
-var config =
+/*var config =
 {
     host: 'validatione2e.database.windows.net',
     user: 'validation',
@@ -37,7 +37,7 @@ conn.connect(
        console.log("Connection established.");
            queryDatabase();
     }   
-});
+});*/
 
 ///////////////////////////////////////////////////////////////////
 //////////////////////     SIGFOX    //////////////////////////////
@@ -60,8 +60,8 @@ var downlinkHandler = (request, reply) => {
     * Return Empty response
     * No message will be delivered to the deviceId
     **/
-    fs.writeFileSync("/home/site/wwwroot/TestBDD", request.payload, "UTF-8");
-    fs.writeFileSync("/home/site/wwwroot/TestBDD2", request.payload.string(), "UTF-8");
+    //fs.writeFileSync("/home/site/wwwroot/TestBDD", request.payload, "UTF-8");
+    //fs.writeFileSync("/home/site/wwwroot/TestBDD2", request.payload.string(), "UTF-8");
     /*conn.query('INSERT INTO dbo.Table (frame) VALUES (?);', [request.payload.Joi.string()],
     function (err, results, fields) {
         if (err) throw err;
@@ -83,6 +83,7 @@ var downlinkHandler = (request, reply) => {
     "downlinkData":getDownlinkData(request.payload)
   });
 };
+
 var downlinkConfig = {
   handler: downlinkHandler,
   validate: {
