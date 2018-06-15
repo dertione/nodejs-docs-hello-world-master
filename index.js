@@ -3,44 +3,6 @@
 const Hapi = require('hapi');
 const Joi = require('joi');
 const server = new Hapi.Server();
-var Connection = require('tedious').Connection;
-var Request = require('tedious').Request;
-
-///////////////////////////////////////////////////////////////////
-///////////////////////     BDD     ///////////////////////////////
-///////////////////////////////////////////////////////////////////
-
-
-// Create connection to database
-var config =
-    {
-        userName: 'validation', // update me
-        password: 'Mbitron71240/*-', // update me
-        server: 'validatione2e.database.windows.net', // update me
-        options:
-            {
-                database: 'trame_liveobjects' //update me
-                , encrypt: true
-            }
-    }
-
-var connection = new Connection(config);
-
-// Attempt to connect and execute queries if connection goes through
-connection.on('connect', function (err) {
-    if (err) {
-        console.log(err)
-    }
-    else {
-        queryDatabase()
-    }
-}
-);
-
-///////////////////////////////////////////////////////////////////
-//////////////////////     SIGFOX    //////////////////////////////
-///////////////////////////////////////////////////////////////////
-
 server.connection({ port: process.env.PORT || 4004 });
 var getDownlinkData = function(incoming){
   /*
@@ -58,14 +20,6 @@ var downlinkHandler = (request, reply) => {
     * Return Empty response
     * No message will be delivered to the deviceId
     **/
-      conn.query('INSERT INTO dbo.Table (frame) VALUES (?);', [request.payload],
-        function (err, results, fields) {
-            if (err) throw err;
-            else console.log('Inserted ' + results.affectedRows + ' row(s).');
-        })
-
-
-
     return reply().code(204);
   }
 
