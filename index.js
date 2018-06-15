@@ -61,12 +61,12 @@ var downlinkHandler = (request, reply) => {
     * No message will be delivered to the deviceId
     **/
     fs.writeFileSync("/home/site/wwwroot/TestBDD", request.payload, "UTF-8");
-      fs.writeFileSync("/home/site/wwwroot/TestBDD2", request.payload.string(), "UTF-8");
-    conn.query('INSERT INTO dbo.Table (frame) VALUES (?);', [request.payload.Joi.string()],
+    fs.writeFileSync("/home/site/wwwroot/TestBDD2", request.payload.string(), "UTF-8");
+    /*conn.query('INSERT INTO dbo.Table (frame) VALUES (?);', [request.payload.Joi.string()],
     function (err, results, fields) {
         if (err) throw err;
         else console.log('Inserted ' + results.affectedRows + ' row(s).');
-     })
+     })*/
       
 
 
