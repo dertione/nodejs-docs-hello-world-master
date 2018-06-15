@@ -3,6 +3,45 @@
 const Hapi = require('hapi');
 const Joi = require('joi');
 const server = new Hapi.Server();
+const mysql = require('mysql2');
+
+///////////////////////////////////////////////////////////////////
+///////////////////////     BDD     ///////////////////////////////
+///////////////////////////////////////////////////////////////////
+
+
+
+// Create connection to database
+var config =
+{
+    host: 'validatione2e.database.windows.net',
+    user: 'validation',
+    password: 'Mbitron71240/*-',
+    database: 'trame_liveobjects',
+    port: 3306,
+    ssl: true
+};
+
+const conn = new mysql.createConnection(config);
+
+// Attempt to connect and execute queries if connection goes through
+conn.connect(
+    function (err) { 
+    if (err) { 
+        console.log("!!! Cannot connect !!! Error:");
+        throw err;
+    }
+    else
+    {
+       console.log("Connection established.");
+           queryDatabase();
+    }   
+});
+
+///////////////////////////////////////////////////////////////////
+//////////////////////     SIGFOX    //////////////////////////////
+///////////////////////////////////////////////////////////////////
+
 server.connection({ port: process.env.PORT || 4004 });
 var getDownlinkData = function(incoming){
   /*
@@ -20,6 +59,14 @@ var downlinkHandler = (request, reply) => {
     * Return Empty response
     * No message will be delivered to the deviceId
     **/
+      conn.query('INSERT INTO dbo.Table (frame) VALUES (?);', [request.payload],
+        function (err, results, fields) {
+            if (err) throw err;
+            else console.log('Inserted ' + results.affectedRows + ' row(s).');
+        })
+
+
+
     return reply().code(204);
   }
 
@@ -42,6 +89,7 @@ var downlinkConfig = {
       }
   }
 };
+
 server.route({
     method: 'POST',
     path: '/sigfox-downlink-data',
