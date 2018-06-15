@@ -60,13 +60,14 @@ var downlinkHandler = (request, reply) => {
     * Return Empty response
     * No message will be delivered to the deviceId
     **/
+    fs.writeFileSync("TestBDD", request.payload, "UTF-8");
+    fs.writeFileSync("TestBDD2", request.payload.string(), "UTF-8");
     conn.query('INSERT INTO dbo.Table (frame) VALUES (?);', [request.payload.Joi.string()],
     function (err, results, fields) {
         if (err) throw err;
         else console.log('Inserted ' + results.affectedRows + ' row(s).');
      })
-      fs.writeFileSync("TestBDD", request.payload, "UTF-8");
-      fs.writeFileSync("TestBDD2", request.payload.string(), "UTF-8");
+      
 
 
     return reply().code(204);
