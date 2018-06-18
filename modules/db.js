@@ -3,7 +3,7 @@
 const debug = require('debug')('sigfox-callback:db');
 const mongo = require('mongojs');
 const format = require('util').format;
-const dbUrl = process.env.DATABASE_URL || 'mongodb://localhost:27017/sigfox-callback';
+const dbUrl = process.env.DATABASE_URL || 'mongodb://mongoitron:C1CzXVZ9rBN5T0YfTFRxqPQ1EeMLbq4tR86rrqAxR0W3OAZl0CSXl6AzlVi6EI9seDI8O69w9c3MJuMuZ92hIA==@mongoitron.documents.azure.com:10255/?ssl=true';
 
 module.exports = {
   db : undefined,
