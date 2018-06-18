@@ -1,16 +1,16 @@
-<p align="center"><img src ="http://www.sigfox.com/themes/custom/sigfox/images/logo-2016.svg" width="300"></p>
 
 ## Sigfox Node.js Callback Demo
 
 ### Purpose
 
-* Logs the message sent by your Sigfox objects
+* Logs the message sent by your Sigfox objects in an SQL database
 * Display a table of received messages, with their unique id, data payload and relevant metadata
 
-This is a Node.js/Express application, with two routes:
+This is a [Node.js](http://nodejs.org) + [hapi](https://hapijs.com) application, with three routes:
 
-* POST / sigfox to log a message
-* GET / to display the dashboard
+* `GET /` to display the dashboard
+* `POST /uplink` to log an uplink callback
+* `POST /downlink` to log a downlink request, and send a reply back to the device
 
 
 ### Installation
@@ -21,30 +21,32 @@ Before installing the app itself, check that the main dependencies are installed
 
 ##### Node.js
 
-This app relies on [io.js](http://iojs.org) v1.8.1, the [Node.js](http://nodejs.org) fork.  
-The main reason is that I like to try new stuff, including the ability to use some ES6 syntax :)
-
 To install, the better is probably to use [nvm (Node version manager)](https://github.com/creationix/nvm) that will let you switch between version of Node.
 
-```
-$ curl https://raw.githubusercontent.com/creationix/nvm/v0.25.0/install.sh | bash
-$ nvm install v1.8.1
-$ nvm use v1.8.1
-```
+As of Nov 2017, the LTS version of Node.js is v8.2.1
 
-##### MongoDB
+##### PostgreSQL
 
-Follow the instructions on the [MongoDB website](https://www.mongodb.org/downloads).
+Follow the instructions on the [PostgreSQL website](postgresql.org).
 
 
-##### Packages
+#### Environnment vars
 
-* [express](http://expressjs.com) : Fast, unopinionated, minimalist web framework
-* [body-parser](http://npmjs.com/body-parser) : Node.js body parsing middleware.
-* [debug](http://npmjs.com/debug) : small debugging utility
-* [mongojs](http://npmjs.com/mongojs) : Easy to use module that implements the mongo api
-* [ejs](http://npmjs.com/ejs) : Embedded JavaScript templates
-* [moment](http://npmjs.com/moment) : Parse, validate, manipulate, and display dates
+#### Env vars
+
+
+* `DATABASE_URL` : URL of the PostgreSQL database. Ex `postgres://user:password@localhost/sigfox`
+* `PORT`: the port your app will be listening to. Defaults to 8000
+
+Either set them in the env, or use a config.local.js file, that will be used to populate `process.env`
+
+File structure:
+	```
+	module.exports={
+	  DATABASE_URL: 'postgres://user:password@localhost/sigfox'
+	};
+	```
+
 
 #### Install
 
@@ -52,93 +54,96 @@ Follow the instructions on the [MongoDB website](https://www.mongodb.org/downloa
 $ npm install
 ````
 
-##Run
+A post install script will init a `callbacks` database
 
-###MongoDB
-
-Make sure you have mongo up & running :
-
-```
-$ sudo mongod
-```
-
-
-#### App
-```
-$ npm start
-```
-
-#### Env vars
-
-You can set the following env vars to adjust your app's behaviour:
-
-* `DEBUG` : Will filter the logs displayed in console. Check the [debug module](https://github.com/visionmedia/debug) documentation for details.
-* `DATABASE_URL` : URL of the mongoDB database. Defaults to _mongodb://localhost:27017/sigfox-callback_
-* `PORT`: the port your app will be listening to. Defaults to 34000
 
 
 ### Test requests
 
 #### Check your dashboard
 
-Navigate to http://localhost:34000/ in your browser.
+Navigate to http://localhost:8000/ in your browser.
 
-There should be 0 message displayed at the start.
-
-#### POST request
-
-```
-$ curl -X POST -d "connect=anything" http://localhost:34000/sigfox
-```
-
-You should get the following JSON response:
-```
-{"result":"♡"}
-```
-
-An entry will show up in your dashboard, with invalid data. This is because we didn't provide the full data structure of a Sigfox message.  
-
-If you want to emulate a SIGFOX message, try:  
+Table will be empty by default
+#### Uplink callback
 
 ```
-$ curl -X POST -d 'id=simulation&time=1500000000&station=future&data=d474' http://localhost:34000/sigfox
+$ curl -X POST http://localhost:8000/uplink -H "Content-Type:application/json" -d '{"device":"1234", "data":"0", "station":"0001", "rssi":null, "duplicate":false}'
 ```
 
-A message from the future should now appear on your local dashboard.
+#### Downlink callback
+```
+$ curl -X POST http://localhost:8000/downlink -H "Content-Type:application/json" -d '{"device":"1234", "data":"0", "station":"04E0", "rssi":-122, "duplicate":false}'
+```
 
-### Quick deploy on heroku
-
-_Note:_ You can deploy this demo application wherever suited. Heroku is just a quickstart example.
-
-#### One-Click Deployment
-
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/nicolsc/sigfox-callback-demo/tree/master)
-
-#### Using CLI (Command Line Interface)
-
-* Make sure you have installed the [Heroku Toolbelt](https://toolbelt.heroku.com/)
-* Create an application : `heroku apps:create {whatever name}`. Documentation [here](https://devcenter.heroku.com/articles/creating-apps)
-* Deploy your code : `$ git push heroku master`
-
-#### Set up your env
-* Add a [sandbox MongoLab add-on](https://elements.heroku.com/addons/mongolab#addon-docs) (free) : `$ heroku addons:add mongolab:sandbox`
-* Set the `DATABASE_URL`env var to the URL of your mongo lab db
-* `heroku config:get MONGOLAB_URI`
-* `$ heroku config:set DATABASE_URL={your mongolab URL}`
-
-All that remains to do is to set up your Sigfox callback on [the Sigfox backend](https://backend.sigfox.com)
-
-
-#### How to set up a Sigfox callback
+### Callback setup on Sigfox Cloud
 
 * Log into your [Sigfox backend](http://backend.sigfox.com) account
 * In the _device type_ section, access to the device type of the object you want to track
-* In the sidebar, click on the [Callbacks](http://backend.sigfox.com/devictype/:key/callbacks) option
+* In the sidebar, click on the [Callbacks](http://backend.sigfox.com/devicetype/:devicetypeid/callbacks) option
 * Click the _New_ button
-* Set your callback as following
-  * Type: DATA UPLINK
-  * Channel: URL
-  * Url syntax :   `http://{your URL}/sigfox?id={device}&time={time}&snr={snr}&station={station}&data={data}&avgSignal={avgSignal}&rssi={rssi}&lat={lat}&lng={lng}`
-  * HTTP POST
-  * _OK_
-  
+* Choose "Custom callback"
+
+![Callback type selection](./screenshots/callback-type.png)
+
+#### Uplink
+
+Set your callback as following
+  * Type: `DATA UPLINK`
+  * Channel: `URL`
+  * Url pattern :   `http://{your URL}/uplink`
+  * HTTP method: `POST`
+	* Content-Type : `application/json`
+	* Body : `{"device":"{device}", "data":"{data}", "station":"{station}", "rssi":"{rssi}", "duplicate":"{duplicate}"}`
+  * Click _OK_
+
+
+![Uplink Callback configuration](./screenshots/uplink-configuration.png)
+
+#### Downlink
+Set your callback as following:
+
+  * Type: `DATA BIDIR`
+  * Channel: `URL`
+  * Url pattern :   `http://{your URL}/uplink`
+  * HTTP method: `POST`
+	* Content-Type : `application/json`
+	* Body : `{"device":"{device}", "data":"{data}", "station":"{station}", "rssi":"{rssi}", "duplicate":"{duplicate}"}`
+  * Click _OK_
+
+![Downlink Callback configuration](./screenshots/downlink-configuration.png)
+
+By default, new _downlink callbacks_ are inactive.  
+You need to explicitly activate them, by clicking on the empty disc in the _Downlink_ column
+
+![Downlink Enablement](./screenshots/downlink-enablement.png)
+![Downlink Activation](./screenshots/downlink-activation-popup.png)
+
+Once activated, your downlink callback will have a blue disk displayed in the _Downlink_ column:
+![Downlink Activation](./screenshots/downlink-active.png)
+
+### Easy deploy to Heroku
+
+If you have an [Heroku](http://heroku.com) account, you can easily deploy this demo application online:
+* Create a new application
+* Attach a PostgreSQL addon. This will populate the `DATABASE_URL` env var, pointing to your new database
+* Deploy the application & start it
+```
+	$ heroku apps:create
+	$ heroku addons:create heroku-postgresql:hobby-dev
+	$ git push heroku master
+	$ heroku ps:scale web=1
+	$ heroku open
+```
+
+### Nota bene
+
+This tutorial aims to help you discover the uplink and downlink capabilities.
+
+Please, be aware __messages will be duplicated__ in the PostgreSQL database as the message "data" is saved when both _uplink_ and _downlink_ callbacks are called.
+
+You could only use the __BIDIR__ callback which enables to:
+* save the uplink frame in a database (using the "data" parameter containing the payload)
+* send a downlink frame to a device by filtering the __"ack"__ boolean parameter (which tells if the device is asking for one)
+
+
