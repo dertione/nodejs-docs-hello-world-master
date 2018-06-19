@@ -25,7 +25,7 @@ const http = require('http');
 const path = require('path');
 /* init */
 const app = express();
-const port = process.env.PORT || 34000;
+const port = process.env.PORT || 34000 || 8883;
 const server = http.createServer(app);
 const db = require('./modules/db');
 const requestLogger = require('./middlewares/requestLogger');
