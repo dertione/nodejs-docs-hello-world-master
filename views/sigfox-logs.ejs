@@ -25,7 +25,7 @@
                   <th>Device</th>
                   <th>Message timestamp</th>
                   <th>Station ID</th>
-                  <th>Avg signal/noise ratio</th>
+                  <th>Avg snr</th>
                   <th>Rssi</th>
                   <th>Data payload</th>
                 </tr>
@@ -38,7 +38,7 @@
                     <td><%=entry.payload.id%></td>
                     <td><%=moment(entry.payload.time*1000).format()%></td>
                     <td><%=entry.payload.station%></td>
-                    <td><%=entry.payload.avgSignal%> dB</td>
+                    <td><%=entry.payload.avgSnr%> dB</td>
                     <td><%=entry.payload.rssi%> dBm</td>
                     <td><strong><%=entry.payload.data%></strong></td>
                   </tr>
