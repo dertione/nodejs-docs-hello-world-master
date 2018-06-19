@@ -42,7 +42,7 @@ app.locals.moment = require('moment');
 db.connect();
 server.listen(port);
 
-app.get('/sigfox', function(req, res){
+app.get('/sig', function(req, res){
   debug('Looking for logs');
   db.find('calls', {path:'/sigfox', payload:{$exists:true}}, {sort:{time:-1}})
   .then(function(data){
@@ -75,7 +75,7 @@ app.get('/sigfox', function(req, res){
   });
 });
 
-app.get('/objenious', function (req, res) {
+app.get('/obj', function (req, res) {
     debug('Looking for logs');
     dbob.find('callsob', { path: '/objenious', payload: { $exists: true } }, { sort: { time: -1 } })
         .then(function (data) {
