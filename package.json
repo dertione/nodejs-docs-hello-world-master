@@ -5,16 +5,12 @@
   "keywords": "sigfox",
   "main": "server.js",
   "dependencies":{
-    "body-parser": "1.12.3",
-    "debug": "2.1.3",
-    "ejs":  "2.3.1",
-    "express": "4.12.3",
-    "moment":"2.10.2",
-    "mongojs": "0.18.2"
-  },
-  "engines": {
-    "iojs": "1.8.1",
-    "npm": "2.7.5"
+    "body-parser": "1.18.3",
+    "debug": "3.1.0",
+    "ejs":  "2.6.1",
+    "express": "4.16.3",
+    "moment":"2.22.2",
+    "mongojs": "2.6.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
