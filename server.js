@@ -44,7 +44,7 @@ server.listen(port);
 
 app.get('/sig', function(req, res){
   debug('Looking for logs');
-  db.find('calls', {path:'/sigfox', payload:{$exists:true}}, {sort:{time:-1}})
+  db.find('calls', {path:'/sig', payload:{$exists:true}}, {sort:{time:-1}})
   .then(function(data){
     debug('%s items found', data.length);
     res.format({
@@ -77,7 +77,7 @@ app.get('/sig', function(req, res){
 
 app.get('/obj', function (req, res) {
     debug('Looking for logs');
-    dbob.find('callsob', { path: '/objenious', payload: { $exists: true } }, { sort: { time: -1 } })
+    dbob.find('callsob', { path: '/obj', payload: { $exists: true } }, { sort: { time: -1 } })
         .then(function (data) {
             debug('%s items found', data.length);
             res.format({
