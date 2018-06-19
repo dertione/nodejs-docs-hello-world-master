@@ -8,8 +8,7 @@ module.exports = function(req, res, next){
     time: new Date().getTime(),
     payload:req.body||{}
   };
-  
-  
+
   //querystring ?
   if (req.query && Object.keys(req.query).length){
     Object.keys(req.query).forEach(function(key){

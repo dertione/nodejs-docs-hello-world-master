@@ -1,6 +1,6 @@
 ﻿'use strict';
-const dbob = require('../modules/dbob');
-const debug = require('debug')('sigfox-callback:request-loggerlv');
+const db = require('../modules/db');
+const debug = require('debug')('sigfox-callback:request-loggerob');
 module.exportslv = function (req, res, next) {
     let entry = {
         method: req.method,
@@ -23,7 +23,7 @@ module.exportslv = function (req, res, next) {
 
     }
 
-    dbob.insert('callslv', entry)
+    db.insert('callsob', entry)
         .then(function (obj) {
             debug('Request log OK');
             debug(obj);
