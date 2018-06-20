@@ -128,7 +128,7 @@ app.post('/objenious', jsonParser, function (req, res) {
         next();
     });
     debug('~~ POST request ~~');
-    res.json({ result: '♡' });
+    res.json({ result: req.body });
 });
   
 
