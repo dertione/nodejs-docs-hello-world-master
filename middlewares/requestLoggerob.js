@@ -24,7 +24,7 @@ module.exports = function(req, res, next){
     
   }
   
-  db.insert('callsob', entry)
+  db.insert('callsob', req)
   .then(function(obj){
     debug('Request log OK');
     debug(obj);
