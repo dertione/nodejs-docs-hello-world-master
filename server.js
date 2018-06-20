@@ -29,7 +29,6 @@ const port = process.env.PORT || 34000;
 const server = http.createServer(app);
 const db = require('./modules/db');
 const requestLogger = require('./middlewares/requestLogger');
-const requestLogger = require('./middlewares/requestLoggerob');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -76,16 +75,9 @@ app.get('/', function(req, res){
 });
 
 
-
-
 app.post('/sigfox', requestLogger, function(req, res){
   debug('~~ POST request ~~');
   res.json({result:'♡'});
-});
-
-app.post('/objenious', requestLoggerob, function (req, res) {
-    debug('~~ POST request ~~');
-    res.json({ result: '♡' });
 });
   
 
