@@ -75,38 +75,7 @@ app.get('/', function(req, res){
   });
 });
 
-app.get('/obj/', function (req, res) {
-    debug('Looking for logs');
-    dbob.find('callsob', { path: '/objenious', payload: { $exists: true } }, { sort: { time: -1 } })
-        .then(function (data) {
-            debug('%s items found', data.length);
-            res.format({
-                /* JSON first */
-                json: function () {
-                    res.json({ entries: data });
-                },
-                html: function () {
-                    res.render('objenious-logs', { title: 'Objenious messages', entries: data });
-                },
-                default: function () {
-                    res.status(406).send({ err: 'Invalid Accept header. This method only handles html & json' });
-                }
-            });
-        })
-        .catch(function (err) {
-            res.format({
-                json: function () {
-                    return res.json({ err: 'An error occured while fetching messages', details: err });
-                },
-                html: function () {
-                    return res.status(500).render('error', { title: 'An error occured while fetching messages', err: err });
-                },
-                default: function () {
-                    res.status(406).send({ err: 'Invalid Accept header. This method only handles html & json' });
-                }
-            });
-        });
-});
+
 
 
 app.post('/sigfox', requestLogger, function(req, res){
