@@ -42,7 +42,7 @@ app.locals.moment = require('moment');
 db.connect();
 server.listen(port);
 
-app.get('/sig/', function(req, res){
+app.get('/', function(req, res){
   debug('Looking for logs');
   db.find('calls', {path:'/sigfox', payload:{$exists:true}}, {sort:{time:-1}})
   .then(function(data){
