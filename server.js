@@ -116,7 +116,7 @@ app.post('/sigfox', requestLogger, function(req, res){
 });
 
 app.post('/objenious', jsonParser, function (req, res) {
-    db.insert('callsob', req.body)
+    /*db.insert('callsob', req.body)
     .then(function (obj) {
         debug('Request log OK');
         debug(obj);
@@ -126,7 +126,7 @@ app.post('/objenious', jsonParser, function (req, res) {
         debug('Log err : %s', err);
         //return res.status(500).json({err:'Unable to log request', details:err.message});
         next();
-    });
+    });*/
     debug('~~ POST request ~~');
     res.json({ result: req.body });
 });
