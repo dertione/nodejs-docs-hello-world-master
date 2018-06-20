@@ -115,7 +115,7 @@ app.post('/sigfox', requestLogger, function(req, res){
   res.json({result:'♡'});
 });
 
-app.post('/objenious', jsonParser, function (req, res) {
+app.post('/objenious', requestLoggerob, function (req, res) {
     /*db.insert('callsob', req.body)
     .then(function (obj) {
         debug('Request log OK');
