@@ -8,7 +8,7 @@ const dbUrl = process.env.DATABASE_URL || 'mongodb://sigfox:1U9C9MK6LAL0rkJ5wYAN
 module.exports = {
   db : undefined,
   connect : function() {
-    this.db = mongo(dbUrl);
+    this.db = mongo(dbUrl,'calls');
     
     this.db.on('error', function(err){
       debug('DB Error - %s', err);
