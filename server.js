@@ -114,10 +114,10 @@ app.post('/sigfox', requestLogger, function(req, res){
   res.json({result:'♡'});
 });
 
-app.post('/objenious', requestLoggerob, function (req, res) {
+/*app.post('/objenious', requestLoggerob, function (req, res) {
     debug('~~ POST request ~~');
     res.json({ result: '♡' });
-});
+});*/
   
 
 
