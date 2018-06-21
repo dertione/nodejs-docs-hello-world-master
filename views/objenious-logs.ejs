@@ -33,7 +33,7 @@
                 
                 <% entries.forEach(function(entry){%>
                   <tr>
-                    <td><%=entry.time ? moment(entry.timestamp).fromNow() : 'N/A'%></td>
+                    <td><%=entry.timestamp ? moment(entry.timestamp).fromNow() : 'N/A'%></td>
                     <td><%=entry.device_id%></td>
                     <td><%=entry.lat%></td>
                     <td><%=entry.lng%> dB</td>
