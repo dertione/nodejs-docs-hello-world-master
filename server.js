@@ -130,7 +130,7 @@ app.post('/objenious', requestLoggerob, function (req, res) {
 =======
 >>>>>>> parent of 60753d8... test
     debug('~~ POST request ~~');
-    res.json({ result: req.body });
+    res.json({ result: '♡' });
 });
   
 
