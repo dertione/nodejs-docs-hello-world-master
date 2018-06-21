@@ -30,6 +30,7 @@ const server = http.createServer(app);
 const db = require('./modules/db');
 const requestLogger = require('./middlewares/requestLogger');
 const requestLoggerob = require('./middlewares/requestLoggerob');
+var jsonParser = bodyParser.json()
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -114,9 +115,8 @@ app.post('/sigfox', requestLogger, function(req, res){
   res.json({result:'♡'});
 });
 
-app.post('/objenious', requestLoggerob, function (req, res) {
-<<<<<<< HEAD
-    /*db.insert('callsob', req.body)
+app.post('/objenious', jsonParser, function (req, res) {
+    db.insert('callsob', req.body)
     .then(function (obj) {
         debug('Request log OK');
         debug(obj);
@@ -126,9 +126,7 @@ app.post('/objenious', requestLoggerob, function (req, res) {
         debug('Log err : %s', err);
         //return res.status(500).json({err:'Unable to log request', details:err.message});
         next();
-    });*/
-=======
->>>>>>> parent of 60753d8... test
+    });
     debug('~~ POST request ~~');
     res.json({ result: '♡' });
 });
