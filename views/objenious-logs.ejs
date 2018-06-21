@@ -26,19 +26,19 @@
                   <th>Latitude</th>
                   <th>Longitude</th>
                   <th>Geolocation type</th>
-                  <th>Type</th>
+                  <th>Data</th>
                 </tr>
               </thead>
               <tbody>
                 
                 <% entries.forEach(function(entry){%>
                   <tr>
-                    <td><%=entry.time ? moment(entry.time).fromNow() : 'N/A'%></td>
-                    <td><%=entry.payload.device_id%></td>
-                    <td><%=entry.payload.lat%></td>
-                    <td><%=entry.payload.lng%> dB</td>
-                    <td><%=entry.payload.geolocation_type%> dBm</td>
-                    <td><strong><%=entry.payload.type%></strong></td>
+                    <td><%=entry.time ? moment(entry.timestamp).fromNow() : 'N/A'%></td>
+                    <td><%=entry.device_id%></td>
+                    <td><%=entry.lat%></td>
+                    <td><%=entry.lng%> dB</td>
+                    <td><%=entry.protocol_data.rssi%> dBm</td>
+                    <td><strong><%=entry.payload_cleartext%></strong></td>
                   </tr>
                 <%})%>
               </tbody>

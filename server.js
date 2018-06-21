@@ -78,7 +78,7 @@ app.get('/', function(req, res){
 
 app.get('/obj/', function (req, res) {
     debug('Looking for logs');
-    db.find('callsob', { path: '/objenious', payload: { $exists: true } }, { sort: { time: -1 } })
+    db.find('callsob', { device_id: { $exists: true } }, { sort: { timestamp: -1 } })
         .then(function (data) {
             debug('%s items found', data.length);
             res.format({
